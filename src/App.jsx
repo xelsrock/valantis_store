@@ -1,76 +1,77 @@
 import React, { useState, useEffect } from 'react';
 import { deleteDuplicates } from './utils';
-import { xAuth } from './API';
+import { fetchAllProduct, fetchDataProduct, fetchIdProduct } from './API';
 import CardItem from './components/CardItem';
 
 import './App.css';
 
-import { Flex, Spin, Alert, Layout } from 'antd';
+import { Flex, Spin, Alert, Layout, Typography } from 'antd';
 import PaginationBlock from './components/PaginationBlock';
+import FilterBlock from './components/FilterBlock';
 
 const App = () => {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [amountProduct, setAmountProduct] = useState(0);
+
+  const [select, setSelect] = useState('title');
+  const [searchValue, setSearchValue] = useState('');
+
   const fetchProduct = async () => {
     setLoading(true);
-
     try {
-      const responseId = await fetch('http://api.valantis.store:40000/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Auth': xAuth,
-        },
-        body: JSON.stringify({
-          action: 'get_ids',
-          params: { offset: (currentPage - 1) * 50, limit: 50 },
-        }),
-      })
-        .then((res) => res.json())
-        .catch(() => setLoading(false));
-
-      return await fetch('http://api.valantis.store:40000/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Auth': xAuth,
-        },
-        body: JSON.stringify({
-          action: 'get_items',
-          params: { ids: responseId.result },
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => setProduct(deleteDuplicates(data.result)))
-        .finally(() => setLoading(false));
+      fetchIdProduct(currentPage).then((data) => {
+        fetchDataProduct(data)
+          .then((data) => setProduct(deleteDuplicates(data.result)))
+          .finally(() => setLoading(false));
+      });
     } catch (error) {
       <Alert message="При загрузке данных произошла ошибка" type="error" showIcon />;
     }
   };
 
   useEffect(() => {
+    fetchAllProduct().then((data) => setAmountProduct(data.result.length));
     fetchProduct();
   }, [currentPage]);
 
   return (
     <Layout style={{ padding: 40, backgroundColor: 'inherit', margin: '0 auto' }}>
+      <FilterBlock
+        setAmountProduct={setAmountProduct}
+        select={select}
+        setSelect={setSelect}
+        setSearchValue={setSearchValue}
+        searchValue={searchValue}
+        setLoading={setLoading}
+        setProduct={setProduct}
+      />
       {loading ? (
         <Spin size="large" />
       ) : (
         <>
           {product.length ? (
-            <Flex wrap="wrap" gap="middle" align="center" justify="center">
-              {product.map((item) => (
-                <CardItem key={item.id} {...item} />
-              ))}
-            </Flex>
+            <>
+              <Flex wrap="wrap" gap="middle" align="center" justify="center">
+                {product.map((item) => (
+                  <CardItem key={item.id} {...item} />
+                ))}
+              </Flex>
+              {amountProduct ? (
+                <PaginationBlock
+                  amountProduct={amountProduct}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              ) : (
+                ''
+              )}
+            </>
           ) : (
-            <Alert message="При загрузке данных произошла ошибка" type="error" showIcon />
+            <Typography.Title level={2}>По Вашему запросу ничего не найдено</Typography.Title>
           )}
-
-          <PaginationBlock currentPage={currentPage} setCurrentPage={setCurrentPage} />
         </>
       )}
     </Layout>
