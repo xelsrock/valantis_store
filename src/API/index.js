@@ -14,7 +14,7 @@ const getAPIKey = () => {
 export const xAuth = md5(getAPIKey());
 
 export const fetchAllProduct = async () => {
-  return await fetch('http://api.valantis.store:40000/', {
+  return await fetch('https://api.valantis.store:40000/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ export const fetchAllProduct = async () => {
 };
 
 export const fetchDataProduct = async (productIds) => {
-  return await fetch('http://api.valantis.store:40000/', {
+  return await fetch('https://api.valantis.store:40000/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export const fetchDataProduct = async (productIds) => {
 };
 
 export const fetchIdProduct = async (page) => {
-  return await fetch('http://api.valantis.store:40000/', {
+  return await fetch('https://api.valantis.store:40000/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export const fetchIdProduct = async (page) => {
 };
 
 export const fetchFilterPrice = async (price) => {
-  return await fetch('http://api.valantis.store:40000/', {
+  return await fetch('https://api.valantis.store:40000/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export const fetchFilterPrice = async (price) => {
 };
 
 export const fetchFilterTitle = async (title) => {
-  return await fetch('http://api.valantis.store:40000/', {
+  return await fetch('https://api.valantis.store:40000/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export const fetchFilterTitle = async (title) => {
 };
 
 export const fetchFilterBrand = async (brand) => {
-  return await fetch('http://api.valantis.store:40000/', {
+  return await fetch('https://api.valantis.store:40000/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
