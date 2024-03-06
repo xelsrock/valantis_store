@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.f8375ff1.css","mappings":"AAKA,uBAME,QAAS,CACT,SACF","sources":["App.css"],"sourcesContent":["body {\r\n  margin: 0;\r\n  padding: 0;\r\n}\r\n\r\nh1,\r\nh2,\r\nh3,\r\nh4,\r\nh5,\r\nh6 {\r\n  margin: 0;\r\n  padding: 0;\r\n}"],"names":[],"sourceRoot":""}
